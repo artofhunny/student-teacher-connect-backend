@@ -41,16 +41,23 @@ const registerUser = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.cookie(
-      "token",
-      token
-      // {
-      //     httpOnly: true,
-      //     secure: true,
-      //     sameSite: "none",
-      //     maxAge: 7 * 24 * 60 * 60 * 1000,
-      // }
-    );
+    // res.cookie(
+    //   "token",
+    //   token
+    //   // {
+    //   //     httpOnly: true,
+    //   //     secure: true,
+    //   //     sameSite: "none",
+    //   //     maxAge: 7 * 24 * 60 * 60 * 1000,
+    //   // }
+    // );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // MUST be true in production
+      sameSite: "none", // MUST be "none" for cross-site
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     res.json({
       message: "signup successfully",
@@ -95,16 +102,23 @@ const loginUser = async (req, res) => {
     );
 
     // 5️⃣ Send token via httpOnly cookie
-    res.cookie(
-      "token",
-      token
-      //  {
-      //     httpOnly: true,
-      //     secure: process.env.NODE_ENV === "production",
-      //     sameSite: "none",
-      //     maxAge: 7 * 24 * 60 * 60 * 1000,
-      // }
-    );
+    // res.cookie(
+    //   "token",
+    //   token
+    //   //  {
+    //   //     httpOnly: true,
+    //   //     secure: process.env.NODE_ENV === "production",
+    //   //     sameSite: "none",
+    //   //     maxAge: 7 * 24 * 60 * 60 * 1000,
+    //   // }
+    // );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // MUST be true in production
+      sameSite: "none", // MUST be "none" for cross-site
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     // 6️⃣ Send safe user response
     res.status(200).json({
@@ -140,7 +154,7 @@ const fetchProfile = async (req, res) => {
       });
     }
 
-    res.status(400).json({error: "Please login"});
+    res.status(400).json({ error: "Please login" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
