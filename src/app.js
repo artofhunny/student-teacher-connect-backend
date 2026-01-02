@@ -12,7 +12,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://student-teacher-connect-frontend-6lczbznnc.vercel.app",
+      "https://student-teacher-connect-frontend.vercel.app",
     ],
     credentials: true,
   })
