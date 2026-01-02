@@ -162,10 +162,11 @@ const fetchProfile = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   try {
-    res.clearCookie("token", {
+    res.cookie("token", "", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
+      expires: new Date(0),
     });
 
     return res.status(200).json({
