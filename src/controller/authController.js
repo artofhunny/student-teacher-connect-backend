@@ -41,13 +41,15 @@ const registerUser = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.cookie("token", token, 
-        // {
-        //     httpOnly: true,
-        //     secure: true,
-        //     sameSite: "none",
-        //     maxAge: 7 * 24 * 60 * 60 * 1000,
-        // }
+    res.cookie(
+      "token",
+      token
+      // {
+      //     httpOnly: true,
+      //     secure: true,
+      //     sameSite: "none",
+      //     maxAge: 7 * 24 * 60 * 60 * 1000,
+      // }
     );
 
     res.json({
@@ -93,19 +95,21 @@ const loginUser = async (req, res) => {
     );
 
     // 5️⃣ Send token via httpOnly cookie
-    res.cookie("token", token,
-        //  {
-        //     httpOnly: true,
-        //     secure: process.env.NODE_ENV === "production",
-        //     sameSite: "none",
-        //     maxAge: 7 * 24 * 60 * 60 * 1000,
-        // }
+    res.cookie(
+      "token",
+      token
+      //  {
+      //     httpOnly: true,
+      //     secure: process.env.NODE_ENV === "production",
+      //     sameSite: "none",
+      //     maxAge: 7 * 24 * 60 * 60 * 1000,
+      // }
     );
 
     // 6️⃣ Send safe user response
     res.status(200).json({
       message: "Login successful",
-      user: {
+      data: {
         _id: user._id,
         fullName: user.fullName,
         email: user.email,
@@ -118,7 +122,32 @@ const loginUser = async (req, res) => {
   }
 };
 
+const fetchProfile = async (req, res) => {
+  try {
+    const _id = req.user._id;
+
+    const user = await User.findById(_id);
+
+    if (user) {
+      return res.json({
+        message: "Profile Fetched!",
+        data: {
+          _id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role,
+        },
+      });
+    }
+
+    res.status(400).json({error: "Please login"});
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  fetchProfile,
 };

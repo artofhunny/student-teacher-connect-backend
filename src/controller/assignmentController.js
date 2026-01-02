@@ -30,7 +30,7 @@ const getAssignments = async (req, res) => {
     const assignments = await Assignment.find()
       .populate("teacherId", "fullName email");
 
-    res.status(200).json(assignments);
+    res.status(200).json({message: "assignments fetched", data: assignments});
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
